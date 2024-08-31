@@ -19,7 +19,7 @@ async function handleFileUpload(chatId, fileId) {
     const numbers = processFile(fileBuffer);
 
     const initialMessage = `File processed. total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}`;
-    const initialMessageId = await sendMessage(chatId, initialMessage);
+    initialMessageId = await sendMessage(chatId, initialMessage);
 
     await processNumbers(chatId, messageId, numbers);
   } catch (error) {
