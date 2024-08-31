@@ -1,20 +1,38 @@
 const express = require("express");
 const router = express.Router();
-const { sendMessage } = require("./telegram");
+const { sendWelcomeMessage } = require("./telegram");
 
 router.post("/webhook", async (req, res) => {
-  const message = req.body.message;
+  if (callback_query) {
+    const { id, data } = callback_query;
+
+    let responseText = "";
+
+    switch (data) {
+      case "upload_file":
+        responseText = "Let's warm the audience🔥 Please upload your file";
+        break;
+      case "stats":
+        responseText = "Here are your stats📊";
+      default:
+        responseText = "We are working on that⚙️";
+    }
+  }
+  res.status(200).send("OK");
 
   if (message && message.text) {
     const chatId = message.chat.id;
-    const text = message.text;
+    const text = message.text.toLowerCase();
 
-    await sendMessage(chatId, `You texted me: ${text}`);
+    if (text === "/start") {
+      await sendWelcomeMessage(chatId);
+    } else {
+      console.log(`Received message: ${text}`);
+    }
   }
 
   res.status(200).send("OK");
 });
-
 router.get("/hangup", (req, res) => {
   const { reason, userid } = req.query;
   console.log(`Hangup: Reason = ${reason}, userID=${userid}`);
