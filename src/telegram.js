@@ -25,10 +25,15 @@ async function sendWelcomeMessage(chatId, text) {
   }
 }
 
+async function sendMessage(chatId, message) {
+  await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
+    chat_id: chatId,
+    text: message,
+  });
+}
+
 async function handleFileUpload(chatId, fileId) {
   try {
-    // Get the file path
-
     const fileResponse = await axios.get(`${TELEGRAM_API_URL}/getFile`, {
       params: { file_id: fileId },
     });
@@ -36,18 +41,20 @@ async function handleFileUpload(chatId, fileId) {
     const filePath = fileResponse.data.result.file_path;
     const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_API_TOKEN}/${filePath}`;
 
-    // Download the file
-
     const file = await axios.get(fileUrl, {
       responseType: "arraybuffer",
     });
 
-    await processFile(file.data);
+    const numbers = await processFile(file.data);
 
-    await axios.post(`${TELEGRAM_API_URL / sendMessage}`, {
-      chat_id: chatId,
-      text: "File received and processed. Phone numbers will be called soon",
-    });
+    sendMessage(
+      chatId,
+      `File received and processed. Phone numbers will be called soon, total numbers to call: ${numbers.length}`
+    );
+
+    for (const number in numbers) {
+      sendMessage(chatId, number);
+    }
   } catch (error) {
     console.error("Error:", error);
   }
@@ -55,14 +62,10 @@ async function handleFileUpload(chatId, fileId) {
 
 async function processFile(fileBuffer) {
   const fileContent = fileBuffer.toString("utf8");
-  const phoneNumbers = fileContent
+  return (phoneNumbers = fileContent
     .split("\n") // Split the content into lines based on newline characters
     .map((line) => line.trim()) // Trim each line
-    .filter((line) => line);
-
-  for (const phoneNumber of phoneNumbers) {
-    console.log(phoneNumber);
-  }
+    .filter((line) => line));
 }
 
-module.exports = { sendWelcomeMessage, handleFileUpload };
+module.exports = { sendWelcomeMessage, handleFileUpload, sendMessage };
