@@ -18,7 +18,7 @@ app.post("/webhook", async (req, res) => {
     await sendMessage(chatId, `You texted me: ${text}`);
   }
 
-  res.status(200);
+  res.status(200).send("OK");
 });
 
 async function sendMessage(chatId, text) {
@@ -28,7 +28,6 @@ async function sendMessage(chatId, text) {
       text: text,
     });
     console.log(text);
-    console.lo;
   } catch (error) {
     console.error("Error sending message", error);
   }
