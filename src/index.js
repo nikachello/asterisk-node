@@ -29,7 +29,7 @@ async function sendMessage(chatId, text) {
     });
     console.log(text);
   } catch (error) {
-    console.error("Error sending message", error);
+    console.error("Error sending messages", error);
   }
 }
 
