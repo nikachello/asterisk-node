@@ -29,12 +29,9 @@ async function handleFileUpload(chatId, fileId) {
   try {
     // Get the file path
 
-    const fileResponse = await axios.getAdapter(
-      `${TELEGRAM_API_URL / getFile}`,
-      {
-        params: { file_id: fileId },
-      }
-    );
+    const fileResponse = await axios.get(`${TELEGRAM_API_URL}/getFile`, {
+      params: { file_id: fileId },
+    });
 
     const filePath = fileResponse.data.result.file_path;
     const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_API_TOKEN}/${filePath}`;
