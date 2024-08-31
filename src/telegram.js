@@ -42,6 +42,7 @@ function processFile(fileBuffer) {
 }
 
 async function processNumbers(chatId, messageId, numbers) {
+  console.log("We entered processNumbers");
   for (let i = 0; i < numbers.length; i++) {
     const number = numbers[i];
     await updateMessage(
@@ -68,6 +69,7 @@ async function sendMessage(chatId, text) {
 }
 
 async function updateMessage(chatId, messageId, newText) {
+  console.log("We entered updateMessages");
   return axios.post(`${TELEGRAM_API_URL}/editMessageText`, {
     chat_id: chatId,
     message_id: messageId,
