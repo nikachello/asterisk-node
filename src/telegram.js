@@ -21,7 +21,7 @@ async function handleFileUpload(chatId, fileId) {
     const initialMessage = `File processed. total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}`;
     initialMessageId = await sendMessage(chatId, initialMessage);
 
-    await processNumbers(chatId, messageId, numbers);
+    await processNumbers(chatId, numbers);
   } catch (error) {
     console.error("Error:", error);
   }
@@ -47,7 +47,7 @@ function processFile(fileBuffer) {
     .filter((line) => line);
 }
 
-async function processNumbers(chatId, messageId, numbers) {
+async function processNumbers(chatId, numbers) {
   console.log("Entered processNumbers");
   console.log("Numbers length:", numbers.length);
   for (let i = 0; i < numbers.length; i++) {
