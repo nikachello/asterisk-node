@@ -43,6 +43,7 @@ function processFile(fileBuffer) {
 
 async function processNumbers(chatId, messageId, numbers) {
   console.log("We entered processNumbers");
+  console.log("Numbers in processNumbers", numbers);
   for (let i = 0; i < numbers.length; i++) {
     const number = numbers[i];
     await updateMessage(
