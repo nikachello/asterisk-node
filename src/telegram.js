@@ -52,8 +52,13 @@ async function handleFileUpload(chatId, fileId) {
       `File received and processed. Phone numbers will be called soon, total numbers to call: ${numbers.length}`
     );
 
-    for (const number of numbers) {
-      sendMessage(chatId, number);
+    for (let i = 0; i < numbers.length; i++) {
+      const number = numbers[i];
+      await sendMessage(chatId, `Calling number: ${number}`);
+
+      // Send update about the remaining numbers
+      const remaining = numbers.length - (i + 1);
+      await sendMessage(chatId, `Numbers left to call: ${remaining}`);
     }
   } catch (error) {
     console.error("Error:", error);

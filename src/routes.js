@@ -6,8 +6,6 @@ const {
   handleFileUpload,
   sendMessage,
 } = require("./telegram");
-const TELEGRAM_API_TOKEN = "7227645715:AAE9fMuy-9oQ2wtlKc6Kx9TrcfjTmYBs8vo";
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_API_TOKEN}`;
 
 router.post("/webhook", async (req, res) => {
   const { message, callback_query } = req.body;
@@ -33,11 +31,6 @@ router.post("/webhook", async (req, res) => {
     if (replyMessage) {
       sendMessage(callback_query.message.chat.id, responseText);
     }
-
-    // await axios.post(`${TELEGRAM_API_URL}/answerCallbackQuery`, {
-    //   callback_query_id: id,
-    //   text: responseText,
-    // });
 
     return res.status(200).send("OK");
   }
