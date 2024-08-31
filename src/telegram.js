@@ -67,6 +67,14 @@ async function sendMessage(chatId, text) {
   });
 }
 
+async function updateMessage(chatId, messageId, newText) {
+  return axios.post(`${TELEGRAM_API_URL}/editMessageText`, {
+    chat_id: chatId,
+    message_id: messageId,
+    text: newText,
+  });
+}
+
 async function simulateCallProcess(number) {
   await delay(2000);
   const statuses = ["Connected", "Failed", "No answer"];
