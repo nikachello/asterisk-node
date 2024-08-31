@@ -27,6 +27,8 @@ async function sendMessage(chatId, text) {
       chat_id: chatId,
       text: text,
     });
+    console.log(text);
+    console.lo;
   } catch (error) {
     console.error("Error sending message", error);
   }
