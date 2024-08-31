@@ -18,8 +18,8 @@ router.post("/webhook", async (req, res) => {
       default:
         responseText = "We are working on that⚙️";
     }
+    return res.status(200).send("OK");
   }
-  res.status(200).send("OK");
 
   if (message && message.text) {
     const chatId = message.chat.id;
