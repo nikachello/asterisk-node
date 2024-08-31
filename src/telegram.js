@@ -61,6 +61,7 @@ async function processNumbers(chatId, numbers) {
     // Send a new message and update lastMessageId
     const newMessage = `Calling number: ${number}\nStatus: Dialing...`;
     lastMessageId = await sendMessage(chatId, newMessage);
+    deleteMessage(chatId, lastMessageId);
 
     const status = await simulateCallProcess(number);
     const remaining = numbers.length - (i + 1);
