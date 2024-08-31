@@ -45,6 +45,7 @@ let lastMessageId = null;
 
 async function processNumbers(chatId, numbers) {
   console.log("Entered processNumbers");
+  console.log("Numbers length:", numbers.length);
   for (let i = 0; i < numbers.length; i++) {
     console.log("Entered for loop in processNumbers");
     const number = numbers[i];
