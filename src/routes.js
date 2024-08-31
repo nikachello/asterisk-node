@@ -3,6 +3,7 @@ const router = express.Router();
 const { sendWelcomeMessage } = require("./telegram");
 
 router.post("/webhook", async (req, res) => {
+  const { message, callback_query } = req.body;
   if (callback_query) {
     const { id, data } = callback_query;
 
