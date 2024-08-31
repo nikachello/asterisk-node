@@ -51,6 +51,8 @@ async function processNumbers(chatId, messageId, numbers) {
       `Calling number: ${number}\nStatus: Dialing...`
     );
 
+    console.log("For loop in processnumbers finished");
+
     const status = await simulateCallProcess(number);
     const remaining = numbers.length - (i + 1);
     await updateMessage(
@@ -78,12 +80,14 @@ async function updateMessage(chatId, messageId, newText) {
 }
 
 async function simulateCallProcess(number) {
+  console.log("We entered simulateCallProcess");
   await delay(2000);
   const statuses = ["Connected", "Failed", "No answer"];
   return statuses[Math.floor(Math.random() * statuses.length)];
 }
 
 function delay(ms) {
+  console.log("We entered delay");
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
