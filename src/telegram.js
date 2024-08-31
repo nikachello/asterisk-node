@@ -52,7 +52,7 @@ async function handleFileUpload(chatId, fileId) {
       `File received and processed. Phone numbers will be called soon, total numbers to call: ${numbers.length}`
     );
 
-    for (const number in numbers) {
+    for (const number of numbers) {
       sendMessage(chatId, number);
     }
   } catch (error) {
