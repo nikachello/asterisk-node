@@ -67,4 +67,4 @@ async function processFile(fileBuffer) {
   }
 }
 
-module.exports = { sendWelcomeMessage };
+module.exports = { sendWelcomeMessage, handleFileUpload };

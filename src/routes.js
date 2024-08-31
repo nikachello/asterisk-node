@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { sendWelcomeMessage } = require("./telegram");
+const { sendWelcomeMessage, handleFileUpload } = require("./telegram");
 const TELEGRAM_API_TOKEN = "7227645715:AAE9fMuy-9oQ2wtlKc6Kx9TrcfjTmYBs8vo";
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_API_TOKEN}`;
 
 router.post("/webhook", async (req, res) => {
   const { message, callback_query } = req.body;
   if (callback_query) {
+    console.log("Callback query line 10");
     const { id, data } = callback_query;
 
     let responseText = "";
@@ -33,16 +34,21 @@ router.post("/webhook", async (req, res) => {
     const chatId = message.chat.id;
 
     if (message.text === "/start") {
+      console.log("Start is given");
       await sendWelcomeMessage(chatId);
     } else if (message.document) {
+      console.log("Handle upload is started");
       await handleFileUpload(chatId, message.document.file_id);
     } else {
       console.log(`Received a message: ${message.text}`);
     }
+  } else {
+    console.log("No message");
   }
 
   res.status(200).send("OK");
 });
+
 router.get("/hangup", (req, res) => {
   const { reason, userid } = req.query;
   console.log(`Hangup: Reason = ${reason}, userID=${userid}`);
