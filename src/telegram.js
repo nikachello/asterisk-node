@@ -5,6 +5,12 @@ const path = require("path");
 const TELEGRAM_API_TOKEN = "7227645715:AAE9fMuy-9oQ2wtlKc6Kx9TrcfjTmYBs8vo";
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_API_TOKEN}`;
 
+let initialMessageId = null;
+let lastMessageId = null;
+let clickedOne = 0;
+let hangUp = 0;
+let failed = 0;
+
 async function handleFileUpload(chatId, fileId) {
   //
 
@@ -12,8 +18,8 @@ async function handleFileUpload(chatId, fileId) {
     const fileBuffer = await fetchFile(fileId);
     const numbers = processFile(fileBuffer);
 
-    const initialMessage = `File received and processed. Phone numbers will be called, total numbers to call: ${numbers.length}`;
-    const messageId = await sendMessage(chatId, initialMessage);
+    const initialMessage = `File processed. total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}`;
+    const initialMessageId = await sendMessage(chatId, initialMessage);
 
     await processNumbers(chatId, messageId, numbers);
   } catch (error) {
@@ -41,8 +47,6 @@ function processFile(fileBuffer) {
     .filter((line) => line);
 }
 
-let lastMessageId = null;
-
 async function processNumbers(chatId, messageId, numbers) {
   console.log("Entered processNumbers");
   console.log("Numbers length:", numbers.length);
@@ -58,12 +62,19 @@ async function processNumbers(chatId, messageId, numbers) {
     const newMessage = `Calling number: ${number}\nStatus: Dialing...`;
     lastMessageId = await sendMessage(chatId, newMessage);
 
+    await editMessage(
+      chatId,
+      initialMessageId,
+      "File processed. Total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}\n\nCalling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}"
+    );
+
     const status = await simulateCallProcess(number);
     const remaining = numbers.length - (i + 1);
 
     // Send the updated message
     const updateMessage = `Calling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}`;
     lastMessageId = await sendMessage(chatId, updateMessage);
+    deleteMessage(chatId, lastMessageId);
   }
 }
 
@@ -92,8 +103,7 @@ async function sendMessage(chatId, text) {
   }
 }
 
-async function updateMessage(chatId, messageId, newText) {
-  await delay(3000);
+async function editMessage(chatId, messageId, newText) {
   console.log(
     `chatId: ${chatId}, messageId: ${messageId}, newText: ${newText}`
   );
@@ -118,8 +128,15 @@ async function deleteMessage(chatId, messageId) {
 async function simulateCallProcess(number) {
   console.log("We entered simulateCallProcess");
   await delay(5000);
-  const statuses = ["Connected", "Failed", "No answer"];
-  return statuses[Math.floor(Math.random() * statuses.length)];
+  const statuses = ["Clicked 1", "Failed", "No answer"];
+  const status = statuses[Math.floor(Math.random() * statuses.length)];
+  if (status === "Clicked 1") {
+    clickedOne++;
+  } else if (status === "Failed") {
+    failed++;
+  } else if (status === "No asnwer") {
+    hangUp++;
+  }
 }
 
 function delay(ms) {
