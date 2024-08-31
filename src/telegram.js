@@ -73,6 +73,9 @@ async function sendMessage(chatId, text) {
 
 async function updateMessage(chatId, messageId, newText) {
   console.log("We entered updateMessages");
+  console.log(
+    `chatId: ${chatId}, messageId: ${messageId}, newText: ${newText}`
+  );
   return axios.post(`${TELEGRAM_API_URL}/editMessageText`, {
     chat_id: chatId,
     message_id: messageId,
