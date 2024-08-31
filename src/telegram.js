@@ -38,7 +38,7 @@ async function handleFileUpload(chatId, fileId) {
 
     // Download the file
 
-    const file = await axios.getAdapter(fileUrl, {
+    const file = await axios.get(fileUrl, {
       responseType: "arraybuffer",
     });
 
