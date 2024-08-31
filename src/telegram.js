@@ -65,10 +65,12 @@ async function processNumbers(chatId, messageId, numbers) {
 }
 
 async function sendMessage(chatId, text) {
-  return axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
+  const response = await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
     chat_id: chatId,
     text: text,
   });
+
+  return response.data.result.message_id;
 }
 
 async function updateMessage(chatId, messageId, newText) {
