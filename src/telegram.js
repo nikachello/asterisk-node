@@ -43,7 +43,7 @@ function processFile(fileBuffer) {
 
 let lastMessageId = null;
 
-async function processNumbers(chatId, numbers) {
+async function processNumbers(chatId, messageId, numbers) {
   console.log("Entered processNumbers");
   console.log("Numbers length:", numbers.length);
   for (let i = 0; i < numbers.length; i++) {
