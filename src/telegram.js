@@ -5,7 +5,7 @@ const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_API_TOKEN}`;
 
 async function sendWelcomeMessage(chatId, text) {
   try {
-    await axios.post(`${TELEGRAM_API_URL}/sendWelcomeMessage`, {
+    await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
       chat_id: chatId,
       text: "Welcome to the bot! You can warm your audience with automated calls",
       reply_markup: {
