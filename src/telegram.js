@@ -55,9 +55,10 @@ async function handleFileUpload(chatId, fileId) {
 
 async function processFile(fileBuffer) {
   const fileContent = fileBuffer.toString("utf8");
-  const phoneNumbers = fileContent.split(
-    "\n".map((line) => line.trim()).filter((line) => line)
-  );
+  const phoneNumbers = fileContent
+    .split("\n") // Split the content into lines based on newline characters
+    .map((line) => line.trim()) // Trim each line
+    .filter((line) => line);
 
   for (const phoneNumber of phoneNumbers) {
     console.log(phoneNumber);
