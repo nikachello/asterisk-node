@@ -65,7 +65,7 @@ async function processNumbers(chatId, numbers) {
     await editMessage(
       chatId,
       initialMessageId,
-      "File processed. Total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}\n\nCalling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}"
+      `File processed. Total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}\n\nCalling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}`
     );
 
     const status = await simulateCallProcess(number);
