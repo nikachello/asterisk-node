@@ -62,14 +62,14 @@ async function processNumbers(chatId, numbers) {
     const newMessage = `Calling number: ${number}\nStatus: Dialing...`;
     lastMessageId = await sendMessage(chatId, newMessage);
 
+    const status = await simulateCallProcess(number);
+    const remaining = numbers.length - (i + 1);
+
     await editMessage(
       chatId,
       initialMessageId,
       `File processed. Total numbers to call: ${numbers.length} || Clicked 1: ${clickedOne} || HangUp: ${hangUp} || Failed: ${failed}\n\nCalling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}`
     );
-
-    const status = await simulateCallProcess(number);
-    const remaining = numbers.length - (i + 1);
 
     // Send the updated message
     const updateMessage = `Calling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}`;
@@ -77,15 +77,6 @@ async function processNumbers(chatId, numbers) {
     deleteMessage(chatId, lastMessageId);
   }
 }
-
-// async function sendMessage(chatId, text) {
-//   const response = await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
-//     chat_id: chatId,
-//     text: text,
-//   });
-
-//   return response.data.result.message_id;
-// }
 
 async function sendMessage(chatId, text) {
   console.log("Entered sendMessage function");
