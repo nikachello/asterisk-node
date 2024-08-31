@@ -44,7 +44,9 @@ function processFile(fileBuffer) {
 let lastMessageId = null;
 
 async function processNumbers(chatId, numbers) {
+  console.log("Entered processNumbers");
   for (let i = 0; i < numbers.length; i++) {
+    console.log("Entered for loop in processNumbers");
     const number = numbers[i];
 
     if (lastMessageId !== null) {
@@ -74,6 +76,7 @@ async function processNumbers(chatId, numbers) {
 // }
 
 async function sendMessage(chatId, text) {
+  console.log("Entered sendMessage function");
   try {
     const response = await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
       chat_id: chatId,
