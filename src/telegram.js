@@ -41,40 +41,55 @@ function processFile(fileBuffer) {
     .filter((line) => line);
 }
 
-async function processNumbers(chatId, messageId, numbers) {
-  console.log("We entered processNumbers");
-  console.log("Numbers in processNumbers", numbers);
+let lastMessageId = null;
+
+async function processNumbers(chatId, numbers) {
   for (let i = 0; i < numbers.length; i++) {
     const number = numbers[i];
-    await updateMessage(
-      chatId,
-      messageId,
-      `Calling number: ${number}\nStatus: Dialing...`
-    );
 
-    console.log("For loop in processnumbers finished");
+    if (lastMessageId !== null) {
+      await deleteMessage(chatId, lastMessageId); // Optionally delete the old message
+    }
+
+    // Send a new message and update lastMessageId
+    const newMessage = `Calling number: ${number}\nStatus: Dialing...`;
+    lastMessageId = await sendMessage(chatId, newMessage);
 
     const status = await simulateCallProcess(number);
     const remaining = numbers.length - (i + 1);
-    await updateMessage(
-      chatId,
-      messageId,
-      `Calling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}`
-    );
+
+    // Send the updated message
+    const updateMessage = `Calling number: ${number}\nStatus: ${status}\nNumbers left to call: ${remaining}`;
+    lastMessageId = await sendMessage(chatId, updateMessage);
   }
 }
 
-async function sendMessage(chatId, text) {
-  const response = await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
-    chat_id: chatId,
-    text: text,
-  });
+// async function sendMessage(chatId, text) {
+//   const response = await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
+//     chat_id: chatId,
+//     text: text,
+//   });
 
-  return response.data.result.message_id;
+//   return response.data.result.message_id;
+// }
+
+async function sendMessage(chatId, text) {
+  try {
+    const response = await axios.post(`${TELEGRAM_API_URL}/sendMessage`, {
+      chat_id: chatId,
+      text: text,
+    });
+
+    // Return the message_id for further use if needed
+    return response.data.result.message_id;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    throw error; // Rethrow the error to handle it further up the call stack
+  }
 }
 
 async function updateMessage(chatId, messageId, newText) {
-  console.log("We entered updateMessages");
+  await delay(3000);
   console.log(
     `chatId: ${chatId}, messageId: ${messageId}, newText: ${newText}`
   );
@@ -85,9 +100,20 @@ async function updateMessage(chatId, messageId, newText) {
   });
 }
 
+async function deleteMessage(chatId, messageId) {
+  try {
+    await axios.post(`${TELEGRAM_API_URL}/deleteMessage`, {
+      chat_id: chatId,
+      message_id: messageId,
+    });
+  } catch (error) {
+    console.error("Error deleting message:", error);
+  }
+}
+
 async function simulateCallProcess(number) {
   console.log("We entered simulateCallProcess");
-  await delay(2000);
+  await delay(5000);
   const statuses = ["Connected", "Failed", "No answer"];
   return statuses[Math.floor(Math.random() * statuses.length)];
 }
